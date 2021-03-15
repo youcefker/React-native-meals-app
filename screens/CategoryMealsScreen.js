@@ -1,34 +1,19 @@
 import React from 'react' 
 import { Text, View, Button, StyleSheet } from 'react-native'
+import { FlatList } from 'react-native-gesture-handler'
 import { CATEGORIES } from '../data/dummy-data'
+import { MEALS } from '../data/dummy-data'
 
 const CategoryMealsScreen = props => {
+    const renderMealItem = (itemData) => {
+        return (<View><Text>{itemData.item.title}</Text></View>)
+    }
     const catId = props.navigation.getParam('categoryId')
-    const selectedCategory = CATEGORIES.find(cat => cat.id === catId)
+    const displayedMeals = MEALS.filter(meal => meal.categoryIds.indexOf(catId) >= 0)
     return (
-        <View style={styles.screen}>
-            <Text>The Category meal Screen!</Text>
-            <Text>{selectedCategory.title}</Text>
-            <Button title="Go to Meal Detail" onPress={() => {
-                props.navigation.navigate('MealDetail')
-            }}/>
-        </View>
+        <FlatList data={displayedMeals} renderItem={renderMealItem} keyExtractor={(item, index) => item.id}/>
     )
 }
 
-CategoryMealsScreen.navigationOptions = navigationData => {
-    const catId = navigationData.navigation.getParam('categoryId')
-    const selectedCategory = CATEGORIES.find(cat => cat.id === catId)
-    return {
-        headerTitle: selectedCategory.title,
-    }
-}
-const styles = StyleSheet.create({
-    screen : {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center'
-    }
-})
 
 export default CategoryMealsScreen
