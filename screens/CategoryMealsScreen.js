@@ -1,19 +1,22 @@
-import React from 'react' 
-import { Text, View, Button, StyleSheet } from 'react-native'
-import { FlatList } from 'react-native-gesture-handler'
-import { CATEGORIES } from '../data/dummy-data'
-import { MEALS } from '../data/dummy-data'
+import React from 'react'
+import { CATEGORIES, MEALS } from '../data/dummy-data'
+import MealList from '../components/MealList'
+const categoryMealsScreen = (props) => {
 
-const CategoryMealsScreen = props => {
-    const renderMealItem = (itemData) => {
-        return (<View><Text>{itemData.item.title}</Text></View>)
-    }
+    
+
     const catId = props.navigation.getParam('categoryId')
     const displayedMeals = MEALS.filter(meal => meal.categoryIds.indexOf(catId) >= 0)
-    return (
-        <FlatList data={displayedMeals} renderItem={renderMealItem} keyExtractor={(item, index) => item.id}/>
-    )
+    return <MealList listData={displayedMeals} navigation={props.navigation}/>
+}
+
+categoryMealsScreen.navigationOptions = (navigationData) => {
+    const catId = navigationData.navigation.getParam('categoryId')
+    const selectedCategory = CATEGORIES.find(cat => cat.id === catId) 
+    return {
+        headerTitle: selectedCategory.title,
+    }
 }
 
 
-export default CategoryMealsScreen
+export default categoryMealsScreen
